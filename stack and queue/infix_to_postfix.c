@@ -9,8 +9,8 @@ struct stack
     char *arr;
 };
 
-int stackTop(struct stack* sp){
-    return sp->arr[sp->top];
+int stackTop(struct stack* operatorStack){
+    return operatorStack->arr[operatorStack->top];
 }
 
 int isEmpty(struct stack*ptr) {
@@ -54,10 +54,10 @@ int isOperator(char ch){
 }
 
 char * infixToPostfix(char * infix){
-    struct stack * sp = (struct stack*) malloc (sizeof(struct stack));
-    sp->size = 100;
-    sp->top = -1;
-    sp->arr = (char *) malloc (sp->size * sizeof(char));
+    struct stack * operatorStack = (struct stack*) malloc (sizeof(struct stack));
+    operatorStack->size = 100;
+    operatorStack->top = -1;
+    operatorStack->arr = (char *) malloc (operatorStack->size * sizeof(char));
     char * postfix = (char *) malloc ((strlen(infix)+1) * sizeof(char));
     int i=0;
     int j=0;
@@ -68,17 +68,17 @@ char * infixToPostfix(char * infix){
             j++;
             i++;
         }else {
-            if(precedence(infix[i]) > precedence(stackTop(sp))){
-                push(sp, infix[i]);
+            if(precedence(infix[i]) > precedence(stackTop(operatorStack))){
+                push(operatorStack, infix[i]);
                 i++;
             }else {
-                postfix[j] = pop(sp);
+                postfix[j] = pop(operatorStack);
                 j++;
             }
         }
     }
-while(!isEmpty(sp)){
-    postfix[j] = pop(sp);
+while(!isEmpty(operatorStack)){
+    postfix[j] = pop(operatorStack);
     j++;
 }
 postfix[j] = '\0';
@@ -90,6 +90,7 @@ return postfix;
 int main(){
     char * infix = "x-y/z-r*d";
 
+    printf("Entered infix is %s \n", infix);
     printf("postfix is %s", infixToPostfix(infix));
 
     return 0;
